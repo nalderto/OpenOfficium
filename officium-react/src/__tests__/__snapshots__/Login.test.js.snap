@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login Page Tests Login snapshot 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <WithStyles(withRouter()) />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "classes": Object {
+        "button": "withRouter---button-4",
+        "container": "withRouter---container-1",
+        "error": "withRouter---error-6",
+        "field": "withRouter---field-5",
+        "logo": "withRouter---logo-2",
+        "paper": "withRouter---paper-3",
+        "popup": "withRouter---popup-8",
+        "resetButton": "withRouter---resetButton-7",
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "classes": Object {
+          "button": "withRouter---button-4",
+          "container": "withRouter---container-1",
+          "error": "withRouter---error-6",
+          "field": "withRouter---field-5",
+          "logo": "withRouter---logo-2",
+          "paper": "withRouter---paper-3",
+          "popup": "withRouter---popup-8",
+          "resetButton": "withRouter---resetButton-7",
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    "context": Object {},
+  },
+  Symbol(enzyme.__childContext__): null,
+}
+`;

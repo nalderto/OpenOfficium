@@ -1,0 +1,35 @@
+{
+  "firestore": {
+    "rules": "officium-firebase/firestore.rules",
+    "indexes": "officium-firebase/firestore.indexes.json"
+  },
+  "functions": {
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint"
+    ]
+  },
+  "hosting": {
+    "public": "officium-react/build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [{
+      "source": "/**",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=0, no-cache, no-store"
+      }]
+    }]
+  },
+  "storage": {
+    "rules": "officium-firebase/storage.rules"
+  }
+}
