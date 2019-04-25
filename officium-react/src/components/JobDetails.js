@@ -261,6 +261,7 @@ class JobDetailsBase extends React.Component {
       this.setState({
         loaded: true,
         job: snapshot,
+        LastModified: (snapshot.data().LastModified.serverTimestamp().toDate().getYear() + 1900) + "-" + ('0' + (snapshot.data().LastModified.serverTimestamp().toDate().getMonth()+1)).slice(-2) + "-" + ('0' + snapshot.data().LastModified.toDate().getDate()).slice(-2),
         notesValue: snapshot.data().Notes,
         Contacts: contacts,
       });
@@ -1741,7 +1742,7 @@ class JobDetailsBase extends React.Component {
                 <Typography style={{ fontSize: 28, marginTop: 15, fontWeight: 500 }}>{this.state.job.data().JobTitle} Job with {this.state.job.data().CompanyName} in {this.state.job.data().Location}</Typography>
                 {(this.state.job.data().ApplicationStatus === "No Response" && -1 * (moment().diff(moment(this.state.job.data().ExpectedContact, 'YYYY-MM-DD'), 'days')) < 0 && warning2) ||
                   (this.state.job.data().ApplicationStatus === "No Response" && -1 * (moment().diff(moment(this.state.job.data().ExpectedContact, 'YYYY-MM-DD'), 'days')) < 3 && warning1)}
-                {moment().diff(moment(this.state.job.data().LastModified, 'YYYY-MM-DD'), "months") > 0 && warning3}
+                {moment().diff(moment(this.state.LastModified, 'YYYY-MM-DD'), "months") > 0 && warning3}
                 {status}
                 <Button
                   variant="contained"

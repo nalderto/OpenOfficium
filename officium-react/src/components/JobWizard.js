@@ -373,7 +373,7 @@ class JobWizardBase extends React.Component {
             var user = firebase.auth().currentUser;
             let tempCompanyName = this.state.job.companyName;
             let tempJobTitle = this.state.job.jobTitle;
-
+            console.log(firebase.firestore.Timestamp.fromDate(new Date()));
             firebase.firestore().collection('users').doc(user.uid).collection('jobs').doc(this.state.jobid).update({
               CompanyName: tempCompanyName,
               JobTitle: tempJobTitle,
@@ -390,7 +390,7 @@ class JobWizardBase extends React.Component {
               Longitude: longitude,
               Distance: distance,
               ValidLocation: validLocation,
-              LastModified: moment().format("YYYY-MM-DD"),
+              LastModified: firebase.firestore.Timestamp.fromDate(new Date()),
             })
               .then(() => {
                 this.numbeo().then((response) =>{
