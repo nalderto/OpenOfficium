@@ -261,8 +261,8 @@ class JobDetailsBase extends React.Component {
       this.setState({
         loaded: true,
         job: snapshot,
-        LastModified: (snapshot.data().LastModified.serverTimestamp().toDate().getYear() + 1900) + "-" + ('0' + (snapshot.data().LastModified.serverTimestamp().toDate().getMonth()+1)).slice(-2) + "-" + ('0' + snapshot.data().LastModified.toDate().getDate()).slice(-2),
         notesValue: snapshot.data().Notes,
+        LastModified: (snapshot.data().LastModified.toDate().getYear() + 1900) + "-" + ('0' + (snapshot.data().LastModified.toDate().getMonth() + 1)).slice(-2) + "-" + ('0' + snapshot.data().LastModified.toDate().getDate()).slice(-2),
         Contacts: contacts,
       });
     }).then(function () {

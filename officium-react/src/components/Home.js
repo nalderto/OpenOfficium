@@ -178,7 +178,6 @@ class HomeBase extends React.Component {
         trafficTime: null,
         purchasingPower: null,
         restaurantPrice: null,
-        propertyPriceToIncomeRatio: null,
         climateIndex: null,
         safetyIndex: null,
         trafficCo2: null,
@@ -993,7 +992,6 @@ function calculateScore(weights, job) {
   var trafficTime = weights.trafficTime * job.numbeo_traffic_time_index;
   var cpiAndRent = weights.cpiAndRent * job.numbeo_cpi_and_rent_index;
   var purchasingPower = weights.purchasingPower * job.numbeo_purchasing_power_incl_rent_index;
-  var propertyPriceToIncomeRatio = weights.propertyPriceToIncomeRatio * job.numbeo_property_price_to_income_ratio;
   var climateIndex = weights.climateIndex * job.numbeo_climate_index;
   var safetyIndex = weights.safetyIndex * job.numbeo_safety_index;
   var trafficCo2 = weights.trafficCo2 * job.numbeo_traffic_co2_index;
@@ -1008,7 +1006,7 @@ function calculateScore(weights, job) {
   var groceries = weights.groceries * job.numbeo_groceries_index;
   var pollution = weights.pollution * job.numbeo_pollution_index;
 
-  var scores = [crime, trafficTime, cpiAndRent, purchasingPower, propertyPriceToIncomeRatio, climateIndex, safetyIndex, trafficCo2, cpiIndex,
+  var scores = [crime, trafficTime, cpiAndRent, purchasingPower, climateIndex, safetyIndex, trafficCo2, cpiIndex,
     trafficInefficiency, qualityOfLife, rent, healthCare, traffic, groceries, pollution];
 
   var localeScore = scores.reduce(getSum);

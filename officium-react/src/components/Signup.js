@@ -91,67 +91,68 @@ class SignupBase extends React.Component {
 
   signUp = event => {
     if (this.state.name === "") {
-      this.setState({ missingText: "Name field cannot be empty" });
+      this.setState({missingText: "Name field cannot be empty"});
       return;
     }
     if (this.state.email === "") {
-      this.setState({ missingText: "Email field cannot be empty" });
+      this.setState({missingText: "Email field cannot be empty"});
       return;
     }
     if (this.state.password === "") {
-      this.setState({ missingText: "Password field cannot be empty" });
+      this.setState({missingText: "Password field cannot be empty"});
       return;
     }
     if (this.state.city === "") {
-      this.setState({ missingText: "City field cannot be empty" });
+      this.setState({missingText: "City field cannot be empty"});
       return;
     }
     if (this.state.password2 === "") {
-      this.setState({ missingText: "Please confirm your password" });
+      this.setState({missingText: "Please confirm your password"});
       return;
     }
     if (this.state.password2 !== this.state.password) {
-      this.setState({ missingText: "Passwords do not match" });
+      this.setState({missingText: "Passwords do not match"});
       return;
     }
-
+    
     getLocationCoordinates(this.state.city).then(response => {
       var latitude = 0;
       var longitude = 0;
       var validLocation = true;
-      if (response.data.length > 0) {
+      if(response.data.length > 0){
         latitude = response.data[0].lat;
         longitude = response.data[0].lon;
-      } else {
+      }else{
         validLocation = false;
       }
 
 
       this.props.firebase.createUserWithEmailAndPassword(this.state.email, this.state.password, this.state.name, this.state.city, latitude, longitude, validLocation)
         .then(() => {
-          this.numbeo().then((response) => {
+          this.numbeo().then((response)=>{
             return this.props.firebase.doSendEmailVerification();
           });
         })
         .then(() => {
           this.props.history.push('/home');
         }).catch(error => {
-          this.setState({ error });
-        });
+        this.setState({ error });
+      });
     });
   }
 
-  numbeo = () => {
+numbeo = () => {
+        
     let numbeoLocation = this.state.city.replace(/\s/g, "-");
     numbeoLocation = numbeoLocation.replace(".", "");
     numbeoLocation = numbeoLocation.split(",")[0];
-    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API}&query=${numbeoLocation}`;
-    var encodedUrl = encodeURIComponent(queryUrl);
+    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API_KEY}&query=${numbeoLocation}`;
+    var encodedUrl = encodeURIComponent( queryUrl );
 
     return axios.get('https://corsbridge.herokuapp.com/' + encodedUrl)
-      .then(response => {
-        var user = firebase.auth().currentUser;
-        firebase.firestore().collection('users').doc(user.uid).set({
+    .then(response => {
+      var user = firebase.auth().currentUser;
+      firebase.firestore().collection('users').doc(user.uid).set({
           numbeo_crime_index: response.data.crime_index ? response.data.crime_index : 0,
           numbeo_traffic_time_index: response.data.traffic_time_index || 0,
           numbeo_cpi_and_rent_index: response.data.cpi_and_rent_index || 0,
@@ -170,18 +171,18 @@ class SignupBase extends React.Component {
           numbeo_groceries_index: response.data.groceries_index || 0,
           numbeo_pollution_index: response.data.pollution_index || 0,
           numbeo_error: response.data.error || 0,
-        }, { merge: true })
-          .then(() => {
-          }).catch(error => {
-            console.log(error);
-            console.log("could not update profile with numbeo info");
-          });
-        return response;
+      }, {merge: true})
+      .then(() => {
       }).catch(error => {
         console.log(error);
         console.log("could not update profile with numbeo info");
       });
-  }
+      return response;
+  }).catch(error => {
+    console.log(error);
+    console.log("could not update profile with numbeo info");
+  });
+}
 
   render() {
 
@@ -191,7 +192,7 @@ class SignupBase extends React.Component {
       <div className={this.props.classes.container}>
         <Paper className={this.props.classes.paper}>
           <img src={logo} alt="Officium" className={this.props.classes.logo} />
-          <form id="loginForm" style={{ paddingTop: '2%' }} onSubmit={this.handleLogin}>
+          <form id="loginForm" style={{paddingTop:'2%'}} onSubmit={this.handleLogin}>
             <TextField
               id="name"
               type="name"
@@ -203,7 +204,7 @@ class SignupBase extends React.Component {
               className={this.props.classes.field}
               variant="outlined"
             />
-
+           
             <TextField
               id="email"
               type="email"
@@ -225,7 +226,7 @@ class SignupBase extends React.Component {
               inputProps={{ name: "password", placeholder: "Password*", autoComplete: "off" }}
               changeCallback={this.passChange}
               className={this.props.classes.field}
-              style={{ marginBottom: 10, borderRadius: 4, fontSize: '1rem' }}
+              style ={{marginBottom:10, borderRadius: 4, fontSize:'1rem'}}
             />
 
             <TextField
@@ -256,10 +257,10 @@ class SignupBase extends React.Component {
           {<Typography className={this.props.classes.error}>{this.state.missingText}</Typography>}
           <Button id="signup" onClick={this.signUp} variant="contained" color="primary" className={this.props.classes.button}>SIGN UP</Button>
           <div className={this.props.classes.social}>
-            <SignInGoogle id="googleSignup" />
-            <SignInTwitter id="twitterSignup" />
-            <SignInGithub id="gitHubSignup" />
-            <SignInFacebook id="facebookSignup" />
+            <SignInGoogle id="googleSignup"/>
+            <SignInTwitter id="twitterSignup"/>
+            <SignInGithub id="gitHubSignup"/>
+            <SignInFacebook id="facebookSignup"/>
           </div>
         </Paper>
       </div>
@@ -314,15 +315,15 @@ class SignInFacebookBase extends React.Component {
     this.props.firebase
       .doSignInWithFacebook()
       .then(u => {
-        if (u.additionalUserInfo.isNewUser) {
+        if(u.additionalUserInfo.isNewUser){
           var db = firebase.firestore();
           db.collection('users')
-            .doc(u.user.uid).set({
-              EmailAddress: u.user.email,
-              Name: u.user.displayName,
-              Created: firebase.firestore.Timestamp.fromDate(new Date()),
-              done3Feed: false
-            });
+          .doc(u.user.uid).set({
+            EmailAddress: u.user.email,
+            Name: u.user.displayName,
+            Created: firebase.firestore.Timestamp.fromDate(new Date()),
+            done3Feed: false
+          });
         }
 
       })
@@ -360,15 +361,15 @@ class SignInGoogleBase extends React.Component {
     this.props.firebase
       .doSignInWithGoogle()
       .then(u => {
-        if (u.additionalUserInfo.isNewUser) {
+        if(u.additionalUserInfo.isNewUser){
           var db = firebase.firestore();
           db.collection('users')
-            .doc(u.user.uid).set({
-              EmailAddress: u.user.email,
-              Name: u.user.displayName,
-              Created: firebase.firestore.Timestamp.fromDate(new Date()),
-              done3Feed: false
-            });
+          .doc(u.user.uid).set({
+            EmailAddress: u.user.email,
+            Name: u.user.displayName,
+            Created: firebase.firestore.Timestamp.fromDate(new Date()),
+            done3Feed: false
+          });
         }
 
       })
@@ -407,15 +408,15 @@ class SignInTwitterBase extends React.Component {
     this.props.firebase
       .doSignInWithTwitter()
       .then(u => {
-        if (u.additionalUserInfo.isNewUser) {
+        if(u.additionalUserInfo.isNewUser){
           var db = firebase.firestore();
           db.collection('users')
-            .doc(u.user.uid).set({
-              EmailAddress: u.user.email,
-              Name: u.user.displayName,
-              Created: firebase.firestore.Timestamp.fromDate(new Date()),
-              done3Feed: false
-            });
+          .doc(u.user.uid).set({
+            EmailAddress: u.user.email,
+            Name: u.user.displayName,
+            Created: firebase.firestore.Timestamp.fromDate(new Date()),
+            done3Feed: false
+          });
         }
 
       })
@@ -453,15 +454,15 @@ class SignInGithubBase extends React.Component {
     this.props.firebase
       .doSignInWithGithub()
       .then(u => {
-        if (u.additionalUserInfo.isNewUser) {
+        if(u.additionalUserInfo.isNewUser){
           var db = firebase.firestore();
           db.collection('users')
-            .doc(u.user.uid).set({
-              EmailAddress: u.user.email,
-              Name: u.user.displayName,
-              Created: firebase.firestore.Timestamp.fromDate(new Date()),
-              done3Feed: false
-            });
+          .doc(u.user.uid).set({
+            EmailAddress: u.user.email,
+            Name: u.user.displayName,
+            Created: firebase.firestore.Timestamp.fromDate(new Date()),
+            done3Feed: false
+          });
         }
 
       })

@@ -335,7 +335,6 @@ class ProfileBase extends React.Component {
         cpiAndRent: null,
         purchasingPower: null,
         restaurantPrice: null,
-        propertyPriceToIncomeRatio: null,
         climateIndex: null,
         safetyIndex: null,
         trafficCo2: null,
@@ -929,14 +928,6 @@ class ProfileBase extends React.Component {
       weights: tempWeights,
     });
   }
-  handlePopertyPriceToIncomeRatio = (event,sliderValue) => {
-    let tempWeights = Object.assign({}, this.state.weights);  
-    tempWeights.propertyPriceToIncomeRatio = sliderValue;
-    this.setState({
-      // crimeWeight: [event.target.value],
-      weights: tempWeights,
-    });
-  }
   handleClimateIndex = (event,sliderValue) => {
     let tempWeights = Object.assign({}, this.state.weights);  
     tempWeights.climateIndex = sliderValue;
@@ -1028,10 +1019,11 @@ class ProfileBase extends React.Component {
 
 
   numbeo = () => {
+        
     let numbeoLocation = this.state.cityEdit.replace(/\s/g, "-");
     numbeoLocation = numbeoLocation.replace(".", "");
     numbeoLocation = numbeoLocation.split(",")[0];
-    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API}&query=${numbeoLocation}`;
+    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API_KEY}&query=${numbeoLocation}`;
     var encodedUrl = encodeURIComponent( queryUrl );
 
     return axios.get('https://corsbridge.herokuapp.com/' + encodedUrl)
@@ -1043,7 +1035,6 @@ class ProfileBase extends React.Component {
           numbeo_cpi_and_rent_index: response.data.cpi_and_rent_index || 0,
           numbeo_purchasing_power_incl_rent_index: response.data.purchasing_power_incl_rent_index || 0,
           numbeo_restaurant_price_index: response.data.restaurant_price_index || 0,
-          numbeo_property_price_to_income_ratio: response.data.property_price_to_income_ratio || 0,
           numbeo_climate_index: response.data.climate_index || 0,
           numbeo_safety_index: response.data.safety_index || 0,
           numbeo_traffic_co2_index: response.data.traffic_co2_index || 0,
@@ -1202,7 +1193,7 @@ class ProfileBase extends React.Component {
                 step={1}
                 onChange={this.handlePurchasingPower}
               />
-              <Typography variant="subtitle1" align="center">How important is restaurant price to you?</Typography>
+              <Typography variant="subtitle1" align="center">How important are restaurant prices to you?</Typography>
               <Slider className={this.props.classes.slider}
                 value={this.state.weights.restaurantPrice || 0}
                 min={0}
@@ -1210,14 +1201,7 @@ class ProfileBase extends React.Component {
                 step={1}
                 onChange={this.handleRestaurantPrice}
               />
-              <Typography variant="subtitle1" align="center">How important is property price to you?</Typography>
-              <Slider className={this.props.classes.slider}
-                value={this.state.weights.propertyPriceToIncomeRatio || 0}
-                min={0}
-                max={10}
-                step={1}
-                onChange={this.handlePopertyPriceToIncomeRatio}
-              />
+              
               <Typography variant="subtitle1" align="center">How important is climate to you?</Typography>
               <Slider className={this.props.classes.slider}
                 value={this.state.weights.climateIndex || 0}
@@ -1234,7 +1218,7 @@ class ProfileBase extends React.Component {
                 step={1}
                 onChange={this.handleSafetyIndex}
               />
-              <Typography variant="subtitle1" align="center">How important is traffic CO2 to you?</Typography>
+              <Typography variant="subtitle1" align="center">How important are traffic CO2 emissions to you?</Typography>
               <Slider className={this.props.classes.slider}
                 value={this.state.weights.trafficCo2 || 0}
                 min={0}
@@ -1290,7 +1274,7 @@ class ProfileBase extends React.Component {
                 step={1}
                 onChange={this.handleTraffic}
               />
-              <Typography variant="subtitle1" align="center">How important is groceries to you?</Typography>
+              <Typography variant="subtitle1" align="center">How important are grocery prices to you?</Typography>
               <Slider className={this.props.classes.slider}
                 value={this.state.weights.groceries || 0}
                 min={0}

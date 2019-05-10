@@ -156,6 +156,20 @@ exports.createJob = functions.https.onCall((data, context) => {
   return {success: "i hope so"};
 });
 
+//Numbeo stuff
+exports.numbeo = functions.https.onCall((data, context) => {
+  return axios.get('http://www.numbeo.com:8008/api/cities', {
+    params: {
+      api_key: process.env.REACT_APP_NUMBEO_API_KEY
+    }
+  }).then((response) => {
+    return response;
+  })
+  .catch((error)=>{
+    return error;
+ })
+});
+
 //Deletes user from database
 exports.deleteUserFromDb = functions.https.onCall((data, context) => {
   const uid = context.auth.uid;

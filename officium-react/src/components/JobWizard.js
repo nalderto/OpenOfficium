@@ -234,18 +234,20 @@ class JobWizardBase extends React.Component {
     });
   };
 
-  numbeo = () => {
+  numbeo = (id) => {
+
     let numbeoLocation = this.state.job.location.replace(/\s/g, "-");
     numbeoLocation = numbeoLocation.replace(".", "");
     numbeoLocation = numbeoLocation.split(",")[0];
-    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API}&query=${numbeoLocation}`;
+
+    var queryUrl = `https://www.numbeo.com/api/indices?api_key=${process.env.REACT_APP_NUMBEO_API_KEY}&query=${numbeoLocation}`;
     var encodedUrl = encodeURIComponent(queryUrl);
 
     return axios.get('https://corsbridge.herokuapp.com/' + encodedUrl)
       .then(response => {
         var user = firebase.auth().currentUser;
 
-        firebase.firestore().collection('users').doc(user.uid).collection('jobs').doc(this.state.jobid).set({
+        firebase.firestore().collection('users').doc(user.uid).collection('jobs').doc(id).set({
           numbeo_crime_index: response.data.crime_index ? response.data.crime_index : 0,
           numbeo_traffic_time_index: response.data.traffic_time_index || 0,
           numbeo_cpi_and_rent_index: response.data.cpi_and_rent_index || 0,
@@ -360,9 +362,9 @@ class JobWizardBase extends React.Component {
               validLocation
             )
               .then((id) => {
-                this.numbeo().then((response) =>{
+                this.numbeo(id).then((response) =>{
                   this.setState({
-                    success: true, disabled: false, jobid: id,
+                    success: true, disabled: false, 
                   });
                 });
               }).catch(error => {
@@ -373,7 +375,7 @@ class JobWizardBase extends React.Component {
             var user = firebase.auth().currentUser;
             let tempCompanyName = this.state.job.companyName;
             let tempJobTitle = this.state.job.jobTitle;
-            console.log(firebase.firestore.Timestamp.fromDate(new Date()));
+
             firebase.firestore().collection('users').doc(user.uid).collection('jobs').doc(this.state.jobid).update({
               CompanyName: tempCompanyName,
               JobTitle: tempJobTitle,
@@ -393,7 +395,7 @@ class JobWizardBase extends React.Component {
               LastModified: firebase.firestore.Timestamp.fromDate(new Date()),
             })
               .then(() => {
-                this.numbeo().then((response) =>{
+                this.numbeo(this.state.jobid).then((response) =>{
                   this.setState({
                     success: true, disabled: false, 
                   });
